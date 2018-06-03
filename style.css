@@ -1,4 +1,4 @@
-#kakao-wrapper{
+#kakao-wrapper, #kakao-chat-wrapper{
     position: fixed;
     width: 390px;
     height: 660px;
@@ -6,6 +6,54 @@
     border: 0.5px solid rgb(184, 184, 184, 0.4);
     border-radius: 1%;
     top: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    transform:translate(0%, -50%);
+}
+
+#kakao-chat-wrapper{
+    background-color: rgb(250, 250, 250);
+}
+
+#input-chat-wrapper{
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    bottom: 0;
+    height: 99px;
+    width: 389px;
+    margin: 1px;
+    border-bottom-left-radius: 2%;
+    border-bottom-right-radius: 2%;
+}
+
+#input-chat{
+    /* background-color: red; */
+    width: 262px;
+    height: 93px;
+    padding: 0px 10px;
+    border: 0px;
+    outline: none;
+}
+
+#text-send{
+    width: 80px;
+    height: 70px;
+    margin: 15px 8px;
+    background-color: rgb(249, 249, 249);
+    color: rgb(182, 182, 182);
+    font-size: 13px;
+    border-radius: 5%;
+    border: 1px solid rgb(236, 236 ,236);
+}
+
+#chat-contents-wrapper{
+    position: fixed;
+    width: 390px;
+    height: 500px;
+    background-color: rgb(192, 209, 219);
+    border: 0.5px solid rgb(184, 184, 184, 0.4);
+    top: 47%;
     left: 0;
     right: 0;
     margin: auto;
@@ -36,6 +84,7 @@
 }
 
 #kakao-email{
+    /* border: 2px solid rgb(213, 88, 53); */
     border-bottom: 1.3px solid rgba(245, 245, 245, 0.8);
     border-top-left-radius: 2%;
     border-top-right-radius: 2%;
@@ -44,6 +93,7 @@
 #kakao-pw{
     margin: auto;
     border: 1px solid rgb(227, 210, 83);
+    /* border: 2px solid rgb(213, 88, 53); */
     border-top: 0px;
     border-bottom-left-radius: 2%;
     border-bottom-right-radius: 2%;
@@ -58,6 +108,18 @@
     border-radius: 2%;
     font-size:15px;
     color: rgb(186, 186, 186);
+}
+
+#login-err{
+    font-size: 12px;
+    color: rgb(225, 125, 68);
+    width: 252px;
+    position: fixed;
+    top: 65%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    transform:translate(0%, -50%);
 }
 
 ::placeholder {
