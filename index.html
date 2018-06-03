@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
     <title>Document</title>
 </head>
 <body>
     <div id="kakao-wrapper">
         <div id="logo-img"></div>
-        <input type="text">
-        <input type="password">
-        <button>입 장</button>
+        <div id="login-wrapper">
+                <input class="kakao-login" id="kakao-email" type="text" placeholder="이메일">
+                <input class="kakao-login" id="kakao-pw" type="password" placeholder="비밀번호 (6~12자)">
+                <button id="login-btn">로그인</button>
+        </div>
     </div>
 </body>
 </html>
