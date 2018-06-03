@@ -15,9 +15,13 @@ function signup(){
     showLoading();
     firebase.auth().createUserWithEmailAndPassword(getEmail(), getPassword())
     .then(
-        function(success){
-            hideLoginShowChat();
-            hideLoading();
+        function(user){
+            upLoadNickname(user.user.uid).then(function(success){
+                hideLoginShowChat();
+                hideLoading();
+            }, function(error){
+                hideLoading();
+            })
         },
         function(error){
             if(error.code == "auth/email-already-in-use"){
@@ -119,4 +123,10 @@ function enableLogin(){
 function disableLogin(){
     $("#login-btn").removeClass("enable-login");
     $("#login-btn").addClass("disable-login");
+}
+
+function upLoadNickname(uid){
+    return firebase.database().ref("users/" + uid).set({
+        nickName : getEmail()
+    });
 }
