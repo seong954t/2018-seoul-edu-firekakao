@@ -56,21 +56,40 @@
 #input-chat{
     /* background-color: red; */
     width: 262px;
-    height: 93px;
-    padding: 0px 10px;
+    height: 70px;
+    padding: 10px 10px;
     border: 0px;
+    resize: none;
     outline: none;
+    font-size: 16px;
 }
 
 #text-send{
     width: 80px;
     height: 70px;
     margin: 15px 8px;
-    background-color: rgb(249, 249, 249);
-    color: rgb(182, 182, 182);
     font-size: 13px;
     border-radius: 5%;
+    transform: translate(0%, -35px);
     border: 1px solid rgb(236, 236 ,236);
+}
+
+.my-chat{
+    text-align: right;    
+}
+
+.other-chat{
+    text-align: left;  
+}
+
+.enable-text-send{
+    background-color: rgb(252, 228, 77);
+    color: rgb(0, 0, 0);
+}
+
+.disable-text-send{
+    background-color: rgb(249, 249, 249);
+    color: rgb(182, 182, 182);
 }
 
 #chat-contents-wrapper{
@@ -91,8 +110,6 @@
     top: 50%;
     width: 250px;
     height: 139px;
-    /* border: 1px solid rgb(227, 210, 83);
-    border-radius: 2%; */
     left: 0;
     right: 0;
     margin: auto;

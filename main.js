@@ -17,8 +17,7 @@ function signup(){
     .then(
         function(user){
             upLoadNickname(user.user.uid).then(function(success){
-                hideLoginShowChat();
-                hideLoading();
+                loadData();
             }, function(error){
                 hideLoading();
             })
@@ -41,8 +40,7 @@ function signin(){
     firebase.auth().signInWithEmailAndPassword(getEmail(), getPassword())
     .then(
         function(success) {
-            hideLoginShowChat();
-            hideLoading();
+            loadData();
         },
         function(error){
             showErrorLog();
@@ -96,6 +94,40 @@ $("#logout-btn").click(
     }
 )
 
+$("#input-chat").keyup(function(event){
+    if(event.keyCode == 8){
+        if($("#input-chat").val().length <= 1){
+            $("#text-send").addClass("disable-text-send");
+            $("#text-send").removeClass("enable-text-send");
+        }
+    }else{
+        if($("#input-chat").val().length > 0){
+            $("#text-send").removeClass("disable-text-send");
+            $("#text-send").addClass("enable-text-send");
+        }
+    }
+})
+
+$("#input-chat").keypress(function(event){
+    if (event.keyCode == 13) {       
+        if(!event.shiftKey){
+            event.preventDefault();
+            if($("#input-chat").val().length > 1){
+                upLoadChat($("#input-chat").val());
+                $("#input-chat").val("");
+            }
+        }
+    }else{
+        if($("#input-chat").val().length > 0){
+            $("#text-send").removeClass("disable-text-send");
+            $("#text-send").addClass("enable-text-send");
+        }else{
+            $("#text-send").addClass("disable-text-send");
+            $("#text-send").removeClass("enable-text-send");
+        }
+    }
+})
+
 function showLoading(){
     $("#spinner-warpper").show();
 }
@@ -127,6 +159,75 @@ function disableLogin(){
 
 function upLoadNickname(uid){
     return firebase.database().ref("users/" + uid).set({
+        email: getEmail(),
         nickName : getEmail()
+    });
+}
+
+function upLoadChat(contents){
+    getNickname().once('value').then(function(success){
+        firebase.database().ref("chat/"+Date.now())
+        .update({
+            nickName: success.val(),
+            email: firebase.auth().currentUser.email,
+            contents: contents,
+            uid: firebase.auth().getUid()
+        });
+    });
+
+    
+    makeMyChat(contents);
+}
+
+function makeMyChat(contents){
+    $("#chat-contents-wrapper").append(
+        "<div>"+
+            "<div class='my-chat'>"+
+                "<pre>내용 : "+contents+"</pre>"+
+            "</div>"+
+        "</div>"
+    )
+}
+
+function makeOtherChat(nickName, contents){
+    $("#chat-contents-wrapper").append(
+        "<div>"+
+            "<div class='other-chat'>"+
+                "<pre>닉네임 : "+nickName+"</pre>"+
+                "<pre>내용 : "+contents+"</pre>"+
+            "</div>"+
+        "</div>"
+    )
+}
+
+function updateNickname(){
+    return firebase.database().ref("users/"+firebase.auth().getUid()).update({nickName: getNickname()});
+}
+
+function getNickname(){
+    return $("#user-nic").val();
+}
+
+function getNickname(){
+    return firebase.database().ref("users/"+firebase.auth().getUid()+"/nickName");
+}
+
+function loadData(){
+    getNickname().once('value').then(function(success){
+        $("#user-nic")[0].innerText = success.val();
+        hideLoginShowChat();
+        hideLoading();
+        firebase.database().ref("chat/")
+            .orderByKey()
+            .startAt(Date.now()+"")
+            .on('child_added', function(success){
+                receiveChatData = success.val();
+                if(receiveChatData.uid != firebase.auth().getUid()){
+                    makeOtherChat(receiveChatData.nickName, receiveChatData.contents);
+                }
+            });
+    },function(error){
+        showLoginHideChat();
+        hideLoading();
     });
 }
