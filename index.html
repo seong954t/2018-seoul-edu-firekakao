@@ -25,10 +25,21 @@
     </div>
 
     <div id="kakao-chat-wrapper" class="hide-kakao-chat-wrapper">
-        <button id="logout-btn">X</button>
-        <span>현재 접속자 : </span><span id="online-num"></span>
-        <div id="user-nic"></div>
-        <button id="user-nic-modify">수정</button>
+        <div class="chat-upper">
+            <div class="header-button-wrapper">
+                <a id="logout-btn" class="header-button"></a>
+                <a class="header-button"></a>
+                <a class="header-button"></a>
+            </div>
+            <img class="user-default-pic" src="./images/default_profile.jpg" alt="">
+            <div class="header-contents">
+                <span id="user-nic"></span>
+                <button id="user-nic-modify">수정</button>
+                <div>
+                    <img class="users-img" src="./images/users.png" alt=""><span id="online-num"></span>
+                </div>
+            </div>
+        </div>
         <div id="chat-contents-wrapper">
         </div>
         <div id="input-chat-wrapper">
