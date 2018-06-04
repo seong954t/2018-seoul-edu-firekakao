@@ -1,6 +1,4 @@
-// firebase.database().ref('UsersConnection/').orderByChild("connection").equalTo(true).once('value', function(snap){console.log(snap.val())})
-// 입장 인원 체크
-
+var isLogined = false;
 $('.kakao-login').keyup(function(event){
     if(event.keyCode === 13){
         $('#login-btn').click();
@@ -14,12 +12,24 @@ $('.kakao-login').keyup(function(event){
     }
 });
 
+firebase.auth().onAuthStateChanged(function (user) {
+    showLoading();
+    if (user) {
+        if(!isLogined){
+            loadData();
+        }
+    }else{
+        hideLoading();
+    }
+});
+
 function signup(){
     showLoading();
     firebase.auth().createUserWithEmailAndPassword(getEmail(), getPassword())
     .then(
         function(user){
             upLoadNickname(user.user.uid).then(function(success){
+                isLogined = true;
                 loadData();
             }, function(error){
                 hideLoading();
@@ -43,6 +53,7 @@ function signin(){
     firebase.auth().signInWithEmailAndPassword(getEmail(), getPassword())
     .then(
         function(success) {
+            isLogined = true;
             loadData();
         },
         function(error){
@@ -61,20 +72,67 @@ function getPassword(){
     return $("#kakao-pw")[0].value;
 }
 
-function hideLoginShowChat(){
-    $("#kakao-wrapper").removeClass("show-kakao-wrapper");
-    $("#kakao-wrapper").addClass("hide-kakao-wrapper");
-    $("#kakao-chat-wrapper").removeClass("hide-kakao-chat-wrapper");
-    $("#kakao-chat-wrapper").addClass("show-kakao-chat-wrapper");
+function onlineCheck(){
     var myConnectionsRef = firebase.database().ref('UsersConnection/'+firebase.auth().getUid()+'/connection');
 
     var connectedRef = firebase.database().ref('.info/connected');
     connectedRef.on('value', function(snap) {
         if (snap.val() === true){
-            myConnectionsRef.set(true);
+            myConnectionsRef.set(true).then(function(){
+                firebase
+                    .database()
+                    .ref('UsersConnection/')
+                    .on(
+                        'child_changed', 
+                        function(snap){
+                            getOnlineUser();
+                        },
+                        function(error){
+                            console.log(error);
+                        }
+                    );
+                firebase
+                    .database()
+                    .ref('UsersConnection/')
+                    .on(
+                        'child_added', 
+                        function(snap){
+                            getOnlineUser();
+                        },
+                        function(error){
+                            console.log(error);
+                        }
+                    );
+            });
             myConnectionsRef.onDisconnect().set(false);
+            
         }
-    });
+    })
+}
+
+function getOnlineUser(){
+    firebase
+        .database()
+        .ref('UsersConnection/')
+        .orderByChild("connection")
+        .equalTo(true)
+        .once(
+            'value', 
+            function(snap){
+                $("#online-num")[0].innerText = Object.keys(snap.val()).length;
+            },
+            function(error){
+                console.log(error);
+            }
+        )
+}
+
+function hideLoginShowChat(){
+    $("#kakao-wrapper").removeClass("show-kakao-wrapper");
+    $("#kakao-wrapper").addClass("hide-kakao-wrapper");
+    $("#kakao-chat-wrapper").removeClass("hide-kakao-chat-wrapper");
+    $("#kakao-chat-wrapper").addClass("show-kakao-chat-wrapper");
+    onlineCheck();
     resetLogin();
 }
 
@@ -103,6 +161,7 @@ $("#logout-btn").click(
         showLoginHideChat();
         removeChatData();
         firebase.auth().signOut();
+        isLogined = false;
         var myConnectionsRef = firebase.database().ref('UsersConnection/'+firebase.auth().getUid()+'/connection');
         myConnectionsRef.set(false);
     }
@@ -248,15 +307,16 @@ function updateNickname(nickName){
     return firebase.database().ref("users/"+firebase.auth().getUid()).update({nickName: nickName});
 }
 
-function getNickname(){
-    return $("#user-nic").val();
-}
+// function getNickname(){
+//     return $("#user-nic").val();
+// }
 
 function getNickname(){
     return firebase.database().ref("users/"+firebase.auth().getUid()+"/nickName");
 }
 
 function loadData(){
+    console.log("Aaaaaaa");
     getNickname().once('value').then(function(success){
         $("#user-nic")[0].innerText = success.val();
         hideLoginShowChat();
@@ -278,5 +338,5 @@ function loadData(){
 }
 
 function scrollBottom(){
-    $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper").height() }, "slow");
+    $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
 }
