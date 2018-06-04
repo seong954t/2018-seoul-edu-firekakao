@@ -9,7 +9,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="kakao-wrapper" class="hide-kakao-wrapper">
+    <div id="kakao-wrapper" class="show-kakao-wrapper">
         <div id="logo-img"></div>
         <div id="login-wrapper">
                 <input class="kakao-login" id="kakao-email" type="text" placeholder="이메일">
@@ -19,12 +19,11 @@
         <p id="login-err">계정 또는 비밀번호를 다시 확인해주세요.</p>
     </div>
 
-    <div id="kakao-chat-wrapper" class="show-kakao-chat-wrapper">
+    <div id="kakao-chat-wrapper" class="hide-kakao-chat-wrapper">
         <button id="logout-btn"></button>
         <div id="user-nic"></div>
-        <button>수정</button>
+        <button id="user-nic-modify">수정</button>
         <div id="chat-contents-wrapper">
-            
         </div>
         <div id="input-chat-wrapper">
             <textarea name="" id="input-chat"></textarea>

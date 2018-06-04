@@ -94,6 +94,28 @@ $("#logout-btn").click(
     }
 )
 
+$("#text-send").click(
+    function(){
+        sendText();
+    }
+)
+
+$("#user-nic-modify").click(
+    function(){
+        var modifyNic = prompt("수정하실 닉네임을 작성하여주세요.");
+        if(modifyNic.length > 1 && modifyNic.length < 7){
+            updateNickname(modifyNic).then(function(success){
+                $("#user-nic")[0].innerText = modifyNic;
+                alert("수정이 완료되었습니다.");
+            }, function(error){
+                alert("수정에 실패하였습니다.");
+            })
+        }else{
+            alert("수정에 실패하였습니다.");
+        }
+    }
+)
+
 $("#input-chat").keyup(function(event){
     if(event.keyCode == 8){
         if($("#input-chat").val().length <= 1){
@@ -112,10 +134,7 @@ $("#input-chat").keypress(function(event){
     if (event.keyCode == 13) {       
         if(!event.shiftKey){
             event.preventDefault();
-            if($("#input-chat").val().length > 1){
-                upLoadChat($("#input-chat").val());
-                $("#input-chat").val("");
-            }
+            sendText();
         }
     }else{
         if($("#input-chat").val().length > 0){
@@ -127,6 +146,15 @@ $("#input-chat").keypress(function(event){
         }
     }
 })
+
+function sendText(){
+    if($("#input-chat").val().length > 0){
+        upLoadChat($("#input-chat").val());
+        $("#input-chat").val("");
+        $("#text-send").addClass("disable-text-send");
+        $("#text-send").removeClass("enable-text-send");
+    }
+}
 
 function showLoading(){
     $("#spinner-warpper").show();
@@ -183,25 +211,27 @@ function makeMyChat(contents){
     $("#chat-contents-wrapper").append(
         "<div>"+
             "<div class='my-chat'>"+
-                "<pre>내용 : "+contents+"</pre>"+
+                "<pre class='my-chat-contents'>"+contents+"</pre>"+
             "</div>"+
         "</div>"
     )
+    scrollBottom();
 }
 
 function makeOtherChat(nickName, contents){
     $("#chat-contents-wrapper").append(
         "<div>"+
             "<div class='other-chat'>"+
-                "<pre>닉네임 : "+nickName+"</pre>"+
-                "<pre>내용 : "+contents+"</pre>"+
+                "<pre class='other-nic'>"+nickName+"</pre>"+
+                "<pre class='other-chat-contents'>"+contents+"</pre>"+
             "</div>"+
         "</div>"
     )
+    scrollBottom();
 }
 
-function updateNickname(){
-    return firebase.database().ref("users/"+firebase.auth().getUid()).update({nickName: getNickname()});
+function updateNickname(nickName){
+    return firebase.database().ref("users/"+firebase.auth().getUid()).update({nickName: nickName});
 }
 
 function getNickname(){
@@ -222,6 +252,7 @@ function loadData(){
             .startAt(Date.now()+"")
             .on('child_added', function(success){
                 receiveChatData = success.val();
+                console.log(receiveChatData);
                 if(receiveChatData.uid != firebase.auth().getUid()){
                     makeOtherChat(receiveChatData.nickName, receiveChatData.contents);
                 }
@@ -230,4 +261,8 @@ function loadData(){
         showLoginHideChat();
         hideLoading();
     });
+}
+
+function scrollBottom(){
+    $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper").height() }, "slow");
 }
