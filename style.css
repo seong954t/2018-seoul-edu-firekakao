@@ -74,7 +74,7 @@
     /* margin-left: 15px; */
     border-radius: 5%;
     max-width: 250px;
-    white-space: inherit;
+    white-space: pre-wrap;
     word-break: break-all;
 }
 
