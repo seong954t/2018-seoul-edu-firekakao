@@ -27,6 +27,10 @@
     padding-top: 15px;
     font-size: 15px;
 }
+.header-contents span {
+    margin-bottom: 5px;
+    display: inline-block;
+}
 button:focus {
     outline: none;
 }
