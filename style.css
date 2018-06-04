@@ -111,8 +111,8 @@ button:hover {
     width: fit-content;
     background-color: rgb(252, 227, 77);
     padding: 10px 15px;
-    margin-right: 15px;
-    border-radius: 5%;
+    margin: 8px 15px 0px 0px;
+    border-radius: 5px;
     max-width: 250px;
     white-space: pre-wrap;
     word-break: break-all;
