@@ -208,6 +208,14 @@
     font-size:15px;
 }
 
+#login-btn:hover {
+    cursor: pointer;
+}
+
+#login-btn:focus {
+    outline: none;
+}
+
 .disable-login{
     background-color: rgb(246, 246, 246);
     color: rgb(186, 186, 186);
