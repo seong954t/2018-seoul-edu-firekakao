@@ -1,3 +1,6 @@
+// firebase.database().ref('UsersConnection/').orderByChild("connection").equalTo(true).once('value', function(snap){console.log(snap.val())})
+// 입장 인원 체크
+
 $('.kakao-login').keyup(function(event){
     if(event.keyCode === 13){
         $('#login-btn').click();
@@ -63,6 +66,15 @@ function hideLoginShowChat(){
     $("#kakao-wrapper").addClass("hide-kakao-wrapper");
     $("#kakao-chat-wrapper").removeClass("hide-kakao-chat-wrapper");
     $("#kakao-chat-wrapper").addClass("show-kakao-chat-wrapper");
+    var myConnectionsRef = firebase.database().ref('UsersConnection/'+firebase.auth().getUid()+'/connection');
+
+    var connectedRef = firebase.database().ref('.info/connected');
+    connectedRef.on('value', function(snap) {
+        if (snap.val() === true){
+            myConnectionsRef.set(true);
+            myConnectionsRef.onDisconnect().set(false);
+        }
+    });
     resetLogin();
 }
 
@@ -91,6 +103,8 @@ $("#logout-btn").click(
         showLoginHideChat();
         removeChatData();
         firebase.auth().signOut();
+        var myConnectionsRef = firebase.database().ref('UsersConnection/'+firebase.auth().getUid()+'/connection');
+        myConnectionsRef.set(false);
     }
 )
 
