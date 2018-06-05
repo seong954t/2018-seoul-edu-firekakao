@@ -504,7 +504,7 @@ function setOnlineNumber(onlineNum){
     $("#online-num")[0].innerText = onlineNum;
 }
 
+// 채팅 스크롤을 가장 아래로 가게 한다.
 function scrollBottom(){
     $("#chat-contents-wrapper").stop().animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
-    // $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
 }
