@@ -22,12 +22,12 @@ $('.kakao-login').keyup(function(event){
 $("#input-chat").keyup(function(event){
     if(event.keyCode == 8){
         // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
-        if($("#input-chat").val().length <= 1){
+        if(getInputChat().length <= 1){
             disableTextSend();
         }
     }else{
         // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
-        if($("#input-chat").val().length > 0){
+        if(getInputChat().length > 0){
             enableTextSend();
         }
     }
@@ -46,7 +46,7 @@ $("#input-chat").keypress(function(event){
             sendText();
         }
     }else{
-        if($("#input-chat").val().length > 0){
+        if(getInputChat().length > 0){
             // 채팅 입력 시 글자수가 있으면 전송이 가능하도록 변경
             enableTextSend();
         }else{
@@ -88,7 +88,7 @@ function signup(){
     .then(
         function(user){
             // 회원가입이 완료 되었으면 회원 정보를 DB에 저장한다.
-            upLoadNickname(user.user.uid).then(function(success){
+            upLoadNickname().then(function(success){
                 // DB에 저장한 후 데이터를 불러온다.
                 isLogined = true;
                 loadData();
@@ -140,6 +140,11 @@ function getEmail(){
 // 로그인 시 입력한 비밀번호를 가져온다.
 function getPassword(){
     return $("#kakao-pw")[0].value;
+}
+
+// 채팅 내용을 가져온다.
+function getInputChat(){
+    return $("#input-chat").val();
 }
 
 // 현재 사용자의 Uid를 가져온다.
@@ -310,10 +315,10 @@ $("#user-nic-modify").click(
 
 // 채팅 데이터를 전송한다.
 function sendText(){
-    if($("#input-chat").val().length > 0){
+    if(getInputChat().length > 0){
         // 채팅 데이터가 있으면 전송한다.
         // 채팅 데이터를 DB에 저장
-        upLoadChat($("#input-chat").val());
+        upLoadChat(getInputChat());
 
         // 채팅 내용을 공백으로 변경 초기화
         $("#input-chat").val("");
@@ -362,7 +367,7 @@ function disableLogin(){
 
 // 닉네임 변경사항을 DB에 업로드한다.
 function upLoadNickname(uid){
-    return firebase.database().ref("users/" + uid).set({
+    return firebase.database().ref("users/" +getCurrentUid()).set({
         email: getEmail(),
         nickName : getEmail()
     });
@@ -419,12 +424,12 @@ function makeOtherChat(nickName, contents){
 
 // 수정 닉네임을 DB에 저장한다.
 function updateNickname(nickName){
-    return firebase.database().ref("users/"+firebase.auth().getUid()).update({nickName: nickName});
+    return firebase.database().ref("users/"+getCurrentUid()).update({nickName: nickName});
 }
 
 // 현재 사용자의 닉네임을 얻어온다.
 function getNickname(){
-    return firebase.database().ref("users/"+firebase.auth().getUid()+"/nickName");
+    return firebase.database().ref("users/"+getCurrentUid()+"/nickName");
 }
 
 // 로그인 시 사용자의 데이터를 가져온다.
