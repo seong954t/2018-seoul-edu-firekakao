@@ -505,5 +505,6 @@ function setOnlineNumber(onlineNum){
 }
 
 function scrollBottom(){
-    $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
+    $("#chat-contents-wrapper").stop().animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
+    // $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
 }
