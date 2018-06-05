@@ -23,14 +23,12 @@ $("#input-chat").keyup(function(event){
     if(event.keyCode == 8){
         // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
         if($("#input-chat").val().length <= 1){
-            $("#text-send").addClass("disable-text-send");
-            $("#text-send").removeClass("enable-text-send");
+            disableTextSend();
         }
     }else{
         // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
         if($("#input-chat").val().length > 0){
-            $("#text-send").removeClass("disable-text-send");
-            $("#text-send").addClass("enable-text-send");
+            enableTextSend();
         }
     }
 })
@@ -188,7 +186,8 @@ function getOnlineUser(){
         .once(
             'value', 
             function(snap){
-                $("#online-num")[0].innerText = Object.keys(snap.val()).length;
+                // 입장 인원을 WEB에 보여준다.
+                setOnlineNumber(Object.keys(snap.val()).length);
             },
             function(error){
                 console.log(error);
@@ -499,6 +498,12 @@ function UsersConnectionAddListenner(){
         }
     );
 }
+
+// 입장 인원을 WEB에 보여준다.
+function setOnlineNumber(onlineNum){
+    $("#online-num")[0].innerText = onlineNum;
+}
+
 function scrollBottom(){
     $("#chat-contents-wrapper").animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
 }
