@@ -97,6 +97,7 @@ function disableLogin(){
     $("#login-btn").addClass("disable-login");
 }
 
+// 수정된 닉네임을 WEB에 표시한다.
 function setNicknameWeb(nickName){
     $("#user-nic")[0].innerText = nickName;
 }
@@ -109,4 +110,47 @@ function setOnlineNumber(onlineNum){
 // 채팅 스크롤을 가장 아래로 가게 한다.
 function scrollBottom(){
     $("#chat-contents-wrapper").stop().animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
+}
+
+// 수정 닉네임을 DB에 저장한다.
+function updateNickname(nickName){
+    return firebase.database().ref("users/"+getCurrentUid()).update({nickName: nickName});
+}
+
+// 현재 사용자의 닉네임을 얻어온다.
+function getNickname(){
+    return firebase.database().ref("users/"+getCurrentUid()+"/nickName");
+}
+
+// 나의 채팅 내용을 WEB에 보이도록 한다.
+function makeMyChat(contents){
+    $("#chat-contents-wrapper").append(
+        "<div>"+
+            "<div class='my-chat'>"+
+                "<pre class='my-chat-contents'>"+contents+"</pre>"+
+            "</div>"+
+        "</div>"
+    )
+    scrollBottom();
+}
+
+// 상대의 채팅 내용을 WEB에 보이도록 한다.
+function makeOtherChat(nickName, contents){
+    $("#chat-contents-wrapper").append(
+        "<div>"+
+            "<div class='other-chat'>"+
+                "<pre class='other-nic'>"+nickName+"</pre>"+
+                "<pre class='other-chat-contents'>"+contents+"</pre>"+
+            "</div>"+
+        "</div>"
+    )
+    scrollBottom();
+}
+
+// 닉네임 변경사항을 DB에 업로드한다.
+function upLoadNickname(uid){
+    return firebase.database().ref("users/" +getCurrentUid()).set({
+        email: getEmail(),
+        nickName : getEmail()
+    });
 }

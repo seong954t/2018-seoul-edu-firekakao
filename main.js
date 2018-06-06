@@ -60,6 +60,7 @@ $("#input-chat").keypress(function(event){
 
 // 현재 로그인 상태를 체크해준다.
 firebase.auth().onAuthStateChanged(function (user) {
+    // 로딩을 띄운다.
     showLoading();
     if (user) {
         // 로그인 상태일 경우 실행된다.
@@ -69,19 +70,24 @@ firebase.auth().onAuthStateChanged(function (user) {
         }
     }else{
         // 로그인이 안돼있는 경우 실행된다.
+        // 로딩을 제거한다.
         hideLoading();
     }
 });
 
 // 회원가입을 진행한다.
 function signup(){
+    // 로딩을 띄운다.
     showLoading();
+    // 회원가입할 이메일과 비밀번호를 통해 회원가입을 진행한다.
     firebase.auth().createUserWithEmailAndPassword(getEmail(), getPassword())
     .then(
         function(user){
+            // 기존 회원가입이 없는 최초 회원가입일 경우 진행된다.
+            // 기존 회원가입이 있는 경우 아래 error -> auth/email-already-in-use로 이동한다.
             // 회원가입이 완료 되었으면 회원 정보를 DB에 저장한다.
             upLoadNickname().then(function(success){
-                // DB에 저장한 후 데이터를 불러온다.
+                // DB에 저장한 후 필요한 데이터를 불러온다.
                 isLogined = true;
                 loadData();
             }, function(error){
@@ -102,6 +108,7 @@ function signup(){
                 // 에러문구 발생
                 showErrorLog();
             }
+            // 로딩을 제거한다.
             hideLoading();
         }
     )
@@ -112,13 +119,18 @@ function signin(){
     firebase.auth().signInWithEmailAndPassword(getEmail(), getPassword())
     .then(
         function(success) {
+            // 로그인을 체크한다.
             isLogined = true;
+
+            // 필요한 데이터를 불러온다.
             loadData();
         },
         function(error){
             // 로그인에 실패할 경우 발생
             // 에러문구 발생
             showErrorLog();
+
+            // 로딩을 제거한다.
             hideLoading();
         }
     );
@@ -164,7 +176,8 @@ function getOnlineUser(){
             'value', 
             function(snap){
                 // 입장 인원을 WEB에 보여준다.
-                setOnlineNumber(Object.keys(snap.val()).length);
+                var onlineUser = Object.keys(snap.val()).length;
+                setOnlineNumber(onlineUser);
             },
             function(error){
                 console.log(error);
@@ -174,7 +187,9 @@ function getOnlineUser(){
 
 // 로그인 화면이 사라지면서 채팅화면이 나타난다.
 function hideLoginShowChat(){
+    // 로그인창이 사라지도록 한다.
     hideKakaoLoginWrapper();
+    // 채팅창이 보이도록 한다.
     showChatWrapper();
 
     // 접속한 정보를 알려준다.
@@ -186,7 +201,9 @@ function hideLoginShowChat(){
 
 // 채팅화면이 사라지면서 로그인 화면이 나타난다.
 function showLoginHideChat(){
+    // 로그인창이 보이도록 한다.
     showKakaoLoginWrapper();
+    // 채팅창이 사라지도록 한다.
     hideChatWrapper();
     // 기존 데이터 제거
     removeChatData();
@@ -270,14 +287,6 @@ function sendText(){
     }
 }
 
-// 닉네임 변경사항을 DB에 업로드한다.
-function upLoadNickname(uid){
-    return firebase.database().ref("users/" +getCurrentUid()).set({
-        email: getEmail(),
-        nickName : getEmail()
-    });
-}
-
 // 채팅 내용을 DB에 업로드 한다.
 function upLoadChat(contents){
     // 닉네임과 함께 데이터를 저장하기 위해 닉네임을 얻은 후 실행한다.
@@ -298,57 +307,27 @@ function upLoadChat(contents){
     makeMyChat(contents);
 }
 
-// 나의 채팅 내용을 WEB에 보이도록 한다.
-function makeMyChat(contents){
-    $("#chat-contents-wrapper").append(
-        "<div>"+
-            "<div class='my-chat'>"+
-                "<pre class='my-chat-contents'>"+contents+"</pre>"+
-            "</div>"+
-        "</div>"
-    )
-    scrollBottom();
-}
-
-// 상대의 채팅 내용을 WEB에 보이도록 한다.
-function makeOtherChat(nickName, contents){
-    $("#chat-contents-wrapper").append(
-        "<div>"+
-            "<div class='other-chat'>"+
-                "<pre class='other-nic'>"+nickName+"</pre>"+
-                "<pre class='other-chat-contents'>"+contents+"</pre>"+
-            "</div>"+
-        "</div>"
-    )
-    scrollBottom();
-}
-
-// 수정 닉네임을 DB에 저장한다.
-function updateNickname(nickName){
-    return firebase.database().ref("users/"+getCurrentUid()).update({nickName: nickName});
-}
-
-// 현재 사용자의 닉네임을 얻어온다.
-function getNickname(){
-    return firebase.database().ref("users/"+getCurrentUid()+"/nickName");
-}
-
 // 로그인 시 사용자의 데이터를 가져온다.
 function loadData(){
     // 닉네임을 가져온다.
     getNickname().once('value').then(function(success){
-        // 닉네임을 WEB에 추가해준다.
-        setNicknameWeb(success.val());
+        var userNickname = success.val();
+        // 닉네임을 WEB에 보이도록해준다.
+        setNicknameWeb(userNickname);
 
         // 로그인 화면이 사라지고 채팅 창이 나타난다.
         hideLoginShowChat();
 
+        // 로딩창을 제거한다.
         hideLoading();
 
         // 채팅 내용이 DB에서 업데이트 되면 실행된다.
         chatDBListenner();
     },function(error){
+        // 닉네임을 가져오는데 실패할 경우 실행된다.
+        // 로그아웃을 위해 로그인창이 나타나고 채팅창이 사라진다.
         showLoginHideChat();
+        // 로딩을 제거한다.
         hideLoading();
     });
 }
@@ -359,7 +338,7 @@ function chatDBListenner(){
     .orderByKey()
     .startAt(Date.now()+"")
     .on('child_added', function(success){
-        receiveChatData = success.val();
+        var receiveChatData = success.val();
         
         if(receiveChatData.uid != getCurrentUid()){
             // 자신의 Uid와 다를 경우 실행된다.
