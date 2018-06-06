@@ -222,18 +222,21 @@ $("#login-btn").click(
 // 로그아웃 버튼 클릭시 실행
 $("#logout-btn").click(
     function(){
-        // 사용사 접속 여부 변경
-        var myConnectionsRef = firebase.database().ref('UsersConnection/'+getCurrentUid()+'/connection');
-        myConnectionsRef.set(false);
-       
-        // 로그아웃 체크
-        isLogined = false;
+        // 로그아웃 알림창을 띄워준다.
+        if(confirm("로그아웃 하시겠습니까?")){
+            // 사용사 접속 여부 변경
+            var myConnectionsRef = firebase.database().ref('UsersConnection/'+getCurrentUid()+'/connection');
+            myConnectionsRef.set(false);
         
-        // 로그아웃 실행
-        firebase.auth().signOut();
+            // 로그아웃 체크
+            isLogined = false;
+            
+            // 로그아웃 실행
+            firebase.auth().signOut();
 
-        // 로그인 화면으로 변경
-        showLoginHideChat();
+            // 로그인 화면으로 변경
+            showLoginHideChat();
+        }
     }
 )
 
