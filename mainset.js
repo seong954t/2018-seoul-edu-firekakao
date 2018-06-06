@@ -12,12 +12,12 @@ function enableTextSend(){
 
 // 로그인 시 입력한 이메일을 가져온다.
 function getEmail(){
-    return $("#kakao-email")[0].value;
+    return $("#kakao-email").val();
 }
 
 // 로그인 시 입력한 비밀번호를 가져온다.
 function getPassword(){
-    return $("#kakao-pw")[0].value;
+    return $("#kakao-pw").val();
 }
 
 // 채팅 내용을 가져온다.
@@ -56,8 +56,8 @@ function showChatWrapper(){
 
 // 로그인 화면 입력 값을 초기화한다.
 function resetLogin(){
-    $("#kakao-email")[0].value = "";
-    $("#kakao-pw")[0].value = "";
+    $("#kakao-email").val("");
+    $("#kakao-pw").val("");
 }
 
 // 로딩창을 띄운다.
@@ -99,12 +99,12 @@ function disableLogin(){
 
 // 수정된 닉네임을 WEB에 표시한다.
 function setNicknameWeb(nickName){
-    $("#user-nic")[0].innerText = nickName;
+    $("#user-nic").text(nickName)
 }
 
 // 입장 인원을 WEB에 보여준다.
 function setOnlineNumber(onlineNum){
-    $("#online-num")[0].innerText = onlineNum;
+    $("#online-num").text(onlineNum);
 }
 
 // 채팅 스크롤을 가장 아래로 가게 한다.
