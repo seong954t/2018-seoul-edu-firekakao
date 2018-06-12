@@ -30,50 +30,14 @@ $('.kakao-login').keyup(function(event){
         // Enter 이 외 입력 시 실행
         hideErrorLog(); // 로그인 실패 문구 제거
         if(getPassword().length > 5){
-            enableLogin(); // 비밀번호가 6글자 이상일 경우 색상 로그인 가능하도록 변경
+            // 비밀번호가 6글자 이상일 경우 색상을 로그인 가능하도록 변경
+            enableLogin();
         }else{
-            disableLogin(); // 비밀번호가 6글자 미만일 경우 색상 로그인 불가능하도록 변경
+            // 비밀번호가 6글자 미만일 경우 색상을 로그인 불가능하도록 변경
+            disableLogin();
         }
     }
 });
-
-// 채팅창에서 키보드 입력을 컨트롤 한다.
-$("#input-chat").keyup(function(event){
-    if(event.keyCode == 8){
-        // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
-        if(getInputChat().length <= 1){
-            disableTextSend();
-        }
-    }else{
-        // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
-        if(getInputChat().length > 0){
-            enableTextSend();
-        }
-    }
-})
-
-// 채팅창에서 키보드 입력을 컨트롤 한다.
-$("#input-chat").keypress(function(event){
-
-    if (event.keyCode == 13) {   
-        // Enter 입력 시 실행
-        // shift + enter가 함께 입력되었는지 확인한다. 
-        // shift + enter가 줄바꿈이 일어나도록 처리하기 위함
-        if(!event.shiftKey){
-            // shift가 함께 입력되지 않았으면 채팅 전송이 이루어진다.
-            event.preventDefault();
-            sendText();
-        }
-    }else{
-        if(getInputChat().length > 0){
-            // 채팅 입력 시 글자수가 있으면 전송이 가능하도록 변경
-            enableTextSend();
-        }else{
-            // 채팅 입력 시 글자수가 없으면 전송이 불가능하도록 변경
-            disableTextSend();
-        }
-    }
-})
 
 // 회원가입을 진행한다.
 function signup(){
@@ -149,6 +113,44 @@ $("#login-btn").click(
 // 2-2. 변경 닉네임을 DB에 저장하는 기능.
 // 3. 로그아웃 기능.
 // ---------------------------------------------------------------------
+
+// 채팅창에서 키보드 입력을 컨트롤 한다.
+$("#input-chat").keyup(function(event){
+    if(event.keyCode == 8){
+        // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
+        if(getInputChat().length <= 1){
+            disableTextSend();
+        }
+    }else{
+        // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
+        if(getInputChat().length > 0){
+            enableTextSend();
+        }
+    }
+})
+
+// 채팅창에서 키보드 입력을 컨트롤 한다.
+$("#input-chat").keypress(function(event){
+
+    if (event.keyCode == 13) {   
+        // Enter 입력 시 실행
+        // shift + enter가 함께 입력되었는지 확인한다. 
+        // shift + enter가 줄바꿈이 일어나도록 처리하기 위함
+        if(!event.shiftKey){
+            // shift가 함께 입력되지 않았으면 채팅 전송이 이루어진다.
+            event.preventDefault();
+            sendText();
+        }
+    }else{
+        if(getInputChat().length > 0){
+            // 채팅 입력 시 글자수가 있으면 전송이 가능하도록 변경
+            enableTextSend();
+        }else{
+            // 채팅 입력 시 글자수가 없으면 전송이 불가능하도록 변경
+            disableTextSend();
+        }
+    }
+})
 
 // 전송 버튼 클릭 시 실행
 $("#text-send").click(
