@@ -64,10 +64,8 @@ firebase.auth().onAuthStateChanged(function (user) {
     showLoading();
     if (user) {
         // 로그인 상태일 경우 실행된다.
-        if(!isLogined){
-            // 필요한 데이터를 불러온다.
-            loadData();
-        }
+        // 필요한 데이터를 불러온다.
+        loadData();
     }else{
         // 로그인이 안돼있는 경우 실행된다.
         // 로딩을 제거한다.
@@ -87,9 +85,7 @@ function signup(){
             // 기존 회원가입이 있는 경우 아래 error -> auth/email-already-in-use로 이동한다.
             // 회원가입이 완료 되었으면 회원 정보를 DB에 저장한다.
             upLoadNickname().then(function(success){
-                // DB에 저장한 후 필요한 데이터를 불러온다.
-                isLogined = true;
-                loadData();
+                hideLoading();
             }, function(error){
                 hideLoading();
             })
@@ -119,11 +115,7 @@ function signin(){
     firebase.auth().signInWithEmailAndPassword(getEmail(), getPassword())
     .then(
         function(success) {
-            // 로그인을 체크한다.
-            isLogined = true;
-
-            // 필요한 데이터를 불러온다.
-            loadData();
+            hideLoading();
         },
         function(error){
             // 로그인에 실패할 경우 발생
