@@ -4,8 +4,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         $("#user-nic").text(user.email);
         onlineCheck();
         chatDBListenner();
-        UsersConnectionAddListenner();
-        UsersConnectionAddListenner();
     }else{
         location.href = './login.html';
     }
