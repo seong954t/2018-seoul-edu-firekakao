@@ -7,9 +7,21 @@ firebase.auth().onAuthStateChanged(function (user) {
         UsersConnectionAddListenner();
         UsersConnectionAddListenner();
     }else{
-        // location.href = './login.html';
+        location.href = './login.html';
     }
 });
+
+function getCurrentEmail(){
+    return firebase.auth().currentUser.email
+}
+
+function getCurrentUid(){
+    return firebase.auth().currentUser.uid
+}
+
+function setOnlineNumber(onlineNum){
+    $("#online-num").text(onlineNum);
+}
 
 // 나의 채팅 내용을 WEB에 보이도록 한다.
 function makeMyChat(contents){
@@ -38,14 +50,6 @@ function makeOtherChat(nickName, contents){
 
 function scrollBottom(){
     $("#chat-contents-wrapper").stop().animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
-}
-
-function getCurrentEmail(){
-    return firebase.auth().currentUser.email
-}
-
-function getCurrentUid(){
-    return firebase.auth().currentUser.uid
 }
 
 // 채팅 내용을 DB에 업로드 한다.
@@ -133,10 +137,6 @@ function getOnlineUser(){
                 console.log(error);
             }
         )
-}
-
-function setOnlineNumber(onlineNum){
-    $("#online-num").text(onlineNum);
 }
 
 function onlineCheck(){
