@@ -57,3 +57,15 @@ function signin(){
         }
     );
 }
+
+$('.kakao-login').keyup(function(event){
+    if(event.keyCode === 13){
+        $('#login-btn').click();
+    }
+});
+
+$("#login-btn").click(
+    function(){
+        signup();
+    }
+)
