@@ -126,3 +126,41 @@
     font-size: 15px;
     margin-left: 3px;
 }
+
+.other-chat-contents{
+    display: inline-block;
+    width: fit-content;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 15px;
+    margin: 0px 0px 0px 15px;
+    /* margin-left: 15px; */
+    border-radius: 5%;
+    max-width: 250px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.other-chat{
+    margin: 0px 0px 15px 0px;
+    text-align: left;  
+}
+
+.other-nic{
+    margin: 5px 5px 5px 15px;
+}
+
+.my-chat{
+    text-align: right;    
+}
+
+.my-chat-contents{
+    display: inline-block;
+    width: fit-content;
+    background-color: rgb(252, 227, 77);
+    padding: 10px 15px;
+    margin: 8px 15px 0px 0px;
+    border-radius: 5px;
+    max-width: 250px;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
