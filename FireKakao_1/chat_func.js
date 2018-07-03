@@ -1,26 +1,3 @@
-// firebase.auth().currentUser.email
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        $("#user-nic").text(user.email);
-        onlineCheck();
-        chatDBListenner();
-    }else{
-        location.href = './login.html';
-    }
-});
-
-function getCurrentEmail(){
-    return firebase.auth().currentUser.email
-}
-
-function getCurrentUid(){
-    return firebase.auth().currentUser.uid
-}
-
-function setOnlineNumber(onlineNum){
-    $("#online-num").text(onlineNum);
-}
-
 // 나의 채팅 내용을 WEB에 보이도록 한다.
 function makeMyChat(contents){
     $("#chat-contents-wrapper").append(
@@ -48,6 +25,28 @@ function makeOtherChat(nickName, contents){
 
 function scrollBottom(){
     $("#chat-contents-wrapper").stop().animate({ scrollTop: $("#chat-contents-wrapper")[0].scrollHeight }, "slow");
+}
+
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        $("#user-nic").text(user.email);
+        onlineCheck();
+        chatDBListenner();
+    }else{
+        location.href = './login.html';
+    }
+});
+
+function getCurrentEmail(){
+    return firebase.auth().currentUser.email
+}
+
+function getCurrentUid(){
+    return firebase.auth().currentUser.uid
+}
+
+function setOnlineNumber(onlineNum){
+    $("#online-num").text(onlineNum);
 }
 
 // 채팅 내용을 DB에 업로드 한다.
