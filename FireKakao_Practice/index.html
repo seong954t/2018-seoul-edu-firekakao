@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="kakao-wrapper" class="show-kakao-wrapper">
+        <div class="header-button-wrapper">
+            <a class="header-button"></a>
+            <a class="header-button"></a>
+            <a class="header-button"></a>
+        </div>
+        <div id="logo-img"></div>
+        <div id="login-wrapper">
+            <input class="kakao-login" id="kakao-email" type="text" placeholder="이메일">
+            <input class="kakao-login" id="kakao-pw" type="password" placeholder="비밀번호 (6~12자)">
+            <button id="login-btn" class="disable-login">로그인</button>
+        </div>
+        <p id="login-err">계정 또는 비밀번호를 다시 확인해주세요.</p>
+    </div>
+
+    <div id="kakao-chat-wrapper" class="hide-kakao-chat-wrapper">
+        <div class="chat-upper">
+            <div class="header-button-wrapper">
+                <a id="logout-btn" class="header-button"></a>
+                <a class="header-button"></a>
+                <a class="header-button"></a>
+            </div>
+            <img class="user-default-pic" src="./images/default_profile.jpg" alt="">
+            <div class="header-contents">
+                <span id="user-nic"></span>
+                <button id="user-nic-modify">수정</button>
+                <div>
+                    <img class="users-img" src="./images/users.png" alt=""><span id="online-num"></span>
+                </div>
+            </div>
+        </div>
+        <div id="chat-contents-wrapper">
+        </div>
+        <div id="input-chat-wrapper">
+            <textarea name="" id="input-chat"></textarea>
+            <!-- <input id="input-chat" type="text"> -->
+            <button id="text-send" class="disable-text-send">전송</button>
+        </div>
+    </div>
+
+    <div id="spinner-warpper">
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+    <script src="./firebase.js"></script>
+    <script src="./mainset.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
