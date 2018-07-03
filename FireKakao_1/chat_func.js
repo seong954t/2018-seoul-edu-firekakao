@@ -45,6 +45,10 @@ function getCurrentUid(){
     return firebase.auth().currentUser.uid
 }
 
+function getInputChat(){
+    return $("#input-chat").val();
+}
+
 function setOnlineNumber(onlineNum){
     $("#online-num").text(onlineNum);
 }
@@ -63,6 +67,14 @@ function upLoadChat(contents){
     makeMyChat(contents);
 }
 
+$("#text-send").click(
+    function(){
+        // 채팅 데이터 전송
+        upLoadChat(getInputChat());
+        $("#input-chat").val("");
+    }
+)
+
 // 채팅 내용이 DB에서 업데이트를 감지한다.
 function chatDBListenner(){
     firebase.database().ref("chat/")
@@ -79,40 +91,6 @@ function chatDBListenner(){
             makeOtherChat(receiveChatData.email, receiveChatData.contents);
         }
     });
-}
-
-// DB에서 사용자 접속 데이터의 변화를 감지한다.
-function UsersConnectionChangeListenner(){
-    firebase
-    .database()
-    .ref('UsersConnection/')
-    .on(
-        'child_changed', 
-        function(snap){
-            // 데이터의 변화가 감지되면 현재 입장한 사용자 데이터를 업데이트한다.
-            getOnlineUser();
-        },
-        function(error){
-            console.log(error);
-        }
-    );
-}
-
-// DB에서 사용자 접속 데이터의 새로운 추가를 감지한다.
-function UsersConnectionAddListenner(){
-    firebase
-    .database()
-    .ref('UsersConnection/')
-    .on(
-        'child_added', 
-        function(snap){
-            // 새로운 데이터가 추가되면 현재 입장한 사용자 데이터를 업데이트한다.
-            getOnlineUser();
-        },
-        function(error){
-            console.log(error);
-        }
-    );
 }
 
 // 현재 접속자 데이터를 업데이트한다.
@@ -134,6 +112,40 @@ function getOnlineUser(){
                 console.log(error);
             }
         )
+}
+
+// DB에서 사용자 접속 데이터의 새로운 추가를 감지한다.
+function UsersConnectionAddListenner(){
+    firebase
+    .database()
+    .ref('UsersConnection/')
+    .on(
+        'child_added', 
+        function(snap){
+            // 새로운 데이터가 추가되면 현재 입장한 사용자 데이터를 업데이트한다.
+            getOnlineUser();
+        },
+        function(error){
+            console.log(error);
+        }
+    );
+}
+
+// DB에서 사용자 접속 데이터의 변화를 감지한다.
+function UsersConnectionChangeListenner(){
+    firebase
+    .database()
+    .ref('UsersConnection/')
+    .on(
+        'child_changed', 
+        function(snap){
+            // 데이터의 변화가 감지되면 현재 입장한 사용자 데이터를 업데이트한다.
+            getOnlineUser();
+        },
+        function(error){
+            console.log(error);
+        }
+    );
 }
 
 function onlineCheck(){
