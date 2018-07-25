@@ -116,152 +116,6 @@ $("#login-btn").click(
     }
 )
 
-// ---------------------------- 채팅 화면 기능 ----------------------------
-// 로그인 이후 채팅 시 실행되어야 하는 기능들이 정의 되어있다.
-// 1-1. 채팅 전송 처리 기능.
-// 1-2. 자신의 채팅 말풍선 추가 기능.
-// 1-3. 자신의 채팅 내용을 DB에 저장하는 기능.
-// 2-1. 자신의 닉네임 변경기능.
-// 2-2. 변경 닉네임을 DB에 저장하는 기능.
-// 3. 로그아웃 기능.
-// ---------------------------------------------------------------------
-
-// 채팅 데이터를 전송한다.
-function sendText(){
-    if(getInputChat().length > 0){
-        // 채팅 데이터가 있으면 전송한다.
-        // 채팅 데이터를 DB에 저장
-        upLoadChat(getInputChat());
-
-        // 채팅 내용을 공백으로 변경 초기화
-        $("#input-chat").val("");
-
-        // 전송이 불가능하도록 변경
-        // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
-        
-    }
-}
-
-// 채팅창에서 키보드 입력을 컨트롤 한다.
-$("#input-chat").keyup(function(event){
-    if(event.keyCode == 8){
-        // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
-        if(getInputChat().length <= 1){
-            // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
-            
-        }
-    }else{
-        // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
-        if(getInputChat().length > 0){
-            // TODO :: 전송이 가능하도록 전송 버튼을 활성화 한다.
-            
-        }
-    }
-})
-
-// 채팅창에서 키보드 입력을 컨트롤 한다.
-$("#input-chat").keypress(function(event){
-
-    if (event.keyCode == 13) {   
-        // Enter 입력 시 실행
-        // shift + enter가 함께 입력되었는지 확인한다. 
-        // shift + enter가 줄바꿈이 일어나도록 처리하기 위함
-        if(!event.shiftKey){
-            // shift가 함께 입력되지 않았으면 채팅 전송이 이루어진다.
-            event.preventDefault();
-
-            // TODO :: 채팅 내용을 전송한다.
-            
-        }
-    }else{
-        if(getInputChat().length > 0){
-            // 채팅 입력 시 글자수가 있으면 전송이 가능하도록 변경
-            // TODO :: 전송이 가능하도록 전송 버튼을 활성화 한다.
-            
-        }else{
-            // 채팅 입력 시 글자수가 없으면 전송이 불가능하도록 변경
-            // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
-            
-        }
-    }
-})
-
-// 전송 버튼 클릭 시 실행
-$("#text-send").click(
-    function(){
-        // 채팅 데이터 전송
-        // TODO :: 채팅 내용을 전송한다.
-
-    }
-)
-
-// 채팅 내용을 DB에 업로드 한다.
-function upLoadChat(contents){
-    // 닉네임과 함께 데이터를 저장하기 위해 닉네임을 얻은 후 실행한다.
-    getNickname().once('value').then(function(success){
-
-        // 채팅 데이터를 입력 시간을 통해 DB에 저장한다.
-        // 저장 데이터는 닉네임, 이메일, 채팅 내용, 사용자 Uid이다.
-        firebase.database().ref("chat/"+Date.now())
-        .update({
-            nickName: success.val(),
-            email: firebase.auth().currentUser.email,
-            contents: contents,
-            uid: getCurrentUid()
-        });
-    });
-
-    // 채팅 내용을 WEB에 보여준다.
-    // TODO :: 자신의 채팅 내용을 말풍선으로 보이도록 한다.
-    // contents 에 자신의 채팅 내용이 담겨있음.
-    
-}
-
-// 수정 버튼 클릭시 실행
-$("#user-nic-modify").click(
-    function(){
-        // 입력을 위한 Prompt창을 띄워준다.
-        var modifyNic = prompt("수정하실 닉네임을 작성하여주세요.");
-
-        if(modifyNic.length > 1 && modifyNic.length < 7){
-            // 닉네임이 2~6글자로 입력 시 실행
-
-            // 해당 닉네임을 DB에 수정한다.
-            updateNickname(modifyNic).then(function(success){
-                // 수정된 닉네임을 WEB에서 변경한다.
-                setNicknameWeb(modifyNic);
-
-                // 수정 완료에 대한 알림창을 띄운다.
-                alert("수정이 완료되었습니다.");
-            }, function(error){
-                // 수정 시 에러발생에 대한 알림창을 띄운다.
-                alert("수정에 실패하였습니다.");
-            })
-        }else{
-            // 닉네임이 2~6글자로 입력이 아닐 시 실행
-            alert("수정에 실패하였습니다.");
-        }
-    }
-)
-
-// 로그아웃 버튼 클릭시 실행
-$("#logout-btn").click(
-    function(){
-        // 로그아웃 알림창을 띄워준다.
-        if(confirm("로그아웃 하시겠습니까?")){
-            // 사용사 접속 여부 변경
-            var myConnectionsRef = firebase.database().ref('UsersConnection/'+getCurrentUid()+'/connection');
-            myConnectionsRef.set(false);
-            
-            // 로그아웃 실행
-            firebase.auth().signOut();
-
-            // 로그인 화면으로 변경
-            showLoginHideChat();
-        }
-    }
-)
-
 // ------------------------ 로그인 -> 채팅 전환 기능 ------------------------
 // 로그인 시 채팅화면으로 이동할 때 사용되는 기능들이 정의되어있다.
 // 1-1. 로그인 화면이 사라지면서 채팅 화면이 나타나는 기능.
@@ -412,6 +266,152 @@ function getOnlineUser(){
             }
         )
 }
+
+// ---------------------------- 채팅 화면 기능 ----------------------------
+// 로그인 이후 채팅 시 실행되어야 하는 기능들이 정의 되어있다.
+// 1-1. 채팅 전송 처리 기능.
+// 1-2. 자신의 채팅 말풍선 추가 기능.
+// 1-3. 자신의 채팅 내용을 DB에 저장하는 기능.
+// 2-1. 자신의 닉네임 변경기능.
+// 2-2. 변경 닉네임을 DB에 저장하는 기능.
+// 3. 로그아웃 기능.
+// ---------------------------------------------------------------------
+
+// 채팅 데이터를 전송한다.
+function sendText(){
+    if(getInputChat().length > 0){
+        // 채팅 데이터가 있으면 전송한다.
+        // 채팅 데이터를 DB에 저장
+        upLoadChat(getInputChat());
+
+        // 채팅 내용을 공백으로 변경 초기화
+        $("#input-chat").val("");
+
+        // 전송이 불가능하도록 변경
+        // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
+        
+    }
+}
+
+// 채팅창에서 키보드 입력을 컨트롤 한다.
+$("#input-chat").keyup(function(event){
+    if(event.keyCode == 8){
+        // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
+        if(getInputChat().length <= 1){
+            // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
+            
+        }
+    }else{
+        // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
+        if(getInputChat().length > 0){
+            // TODO :: 전송이 가능하도록 전송 버튼을 활성화 한다.
+            
+        }
+    }
+})
+
+// 채팅창에서 키보드 입력을 컨트롤 한다.
+$("#input-chat").keypress(function(event){
+
+    if (event.keyCode == 13) {   
+        // Enter 입력 시 실행
+        // shift + enter가 함께 입력되었는지 확인한다. 
+        // shift + enter가 줄바꿈이 일어나도록 처리하기 위함
+        if(!event.shiftKey){
+            // shift가 함께 입력되지 않았으면 채팅 전송이 이루어진다.
+            event.preventDefault();
+
+            // TODO :: 채팅 내용을 전송한다.
+            
+        }
+    }else{
+        if(getInputChat().length > 0){
+            // 채팅 입력 시 글자수가 있으면 전송이 가능하도록 변경
+            // TODO :: 전송이 가능하도록 전송 버튼을 활성화 한다.
+            
+        }else{
+            // 채팅 입력 시 글자수가 없으면 전송이 불가능하도록 변경
+            // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
+            
+        }
+    }
+})
+
+// 전송 버튼 클릭 시 실행
+$("#text-send").click(
+    function(){
+        // 채팅 데이터 전송
+        // TODO :: 채팅 내용을 전송한다.
+
+    }
+)
+
+// 채팅 내용을 DB에 업로드 한다.
+function upLoadChat(contents){
+    // 닉네임과 함께 데이터를 저장하기 위해 닉네임을 얻은 후 실행한다.
+    getNickname().once('value').then(function(success){
+
+        // 채팅 데이터를 입력 시간을 통해 DB에 저장한다.
+        // 저장 데이터는 닉네임, 이메일, 채팅 내용, 사용자 Uid이다.
+        firebase.database().ref("chat/"+Date.now())
+        .update({
+            nickName: success.val(),
+            email: firebase.auth().currentUser.email,
+            contents: contents,
+            uid: getCurrentUid()
+        });
+    });
+
+    // 채팅 내용을 WEB에 보여준다.
+    // TODO :: 자신의 채팅 내용을 말풍선으로 보이도록 한다.
+    // contents 에 자신의 채팅 내용이 담겨있음.
+    
+}
+
+// 수정 버튼 클릭시 실행
+$("#user-nic-modify").click(
+    function(){
+        // 입력을 위한 Prompt창을 띄워준다.
+        var modifyNic = prompt("수정하실 닉네임을 작성하여주세요.");
+
+        if(modifyNic.length > 1 && modifyNic.length < 7){
+            // 닉네임이 2~6글자로 입력 시 실행
+
+            // 해당 닉네임을 DB에 수정한다.
+            updateNickname(modifyNic).then(function(success){
+                // 수정된 닉네임을 WEB에서 변경한다.
+                setNicknameWeb(modifyNic);
+
+                // 수정 완료에 대한 알림창을 띄운다.
+                alert("수정이 완료되었습니다.");
+            }, function(error){
+                // 수정 시 에러발생에 대한 알림창을 띄운다.
+                alert("수정에 실패하였습니다.");
+            })
+        }else{
+            // 닉네임이 2~6글자로 입력이 아닐 시 실행
+            alert("수정에 실패하였습니다.");
+        }
+    }
+)
+
+// 로그아웃 버튼 클릭시 실행
+$("#logout-btn").click(
+    function(){
+        // 로그아웃 알림창을 띄워준다.
+        if(confirm("로그아웃 하시겠습니까?")){
+            // 사용사 접속 여부 변경
+            var myConnectionsRef = firebase.database().ref('UsersConnection/'+getCurrentUid()+'/connection');
+            myConnectionsRef.set(false);
+            
+            // 로그아웃 실행
+            firebase.auth().signOut();
+
+            // 로그인 화면으로 변경
+            showLoginHideChat();
+        }
+    }
+)
 
 // ------------------------ 채팅 -> 로그인 전환 기능 ------------------------
 // 로그아웃 시 로그인화면으로 이동할 때 사용되는 함수들이 정의되어있다.
