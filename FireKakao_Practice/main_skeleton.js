@@ -126,6 +126,22 @@ $("#login-btn").click(
 // 3. 로그아웃 기능.
 // ---------------------------------------------------------------------
 
+// 채팅 데이터를 전송한다.
+function sendText(){
+    if(getInputChat().length > 0){
+        // 채팅 데이터가 있으면 전송한다.
+        // 채팅 데이터를 DB에 저장
+        upLoadChat(getInputChat());
+
+        // 채팅 내용을 공백으로 변경 초기화
+        $("#input-chat").val("");
+
+        // 전송이 불가능하도록 변경
+        // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
+        
+    }
+}
+
 // 채팅창에서 키보드 입력을 컨트롤 한다.
 $("#input-chat").keyup(function(event){
     if(event.keyCode == 8){
@@ -160,11 +176,11 @@ $("#input-chat").keypress(function(event){
     }else{
         if(getInputChat().length > 0){
             // 채팅 입력 시 글자수가 있으면 전송이 가능하도록 변경
-            // TODO :: 전송이 가능하도록 색상을 변경한다.
+            // TODO :: 전송이 가능하도록 전송 버튼을 활성화 한다.
             
         }else{
             // 채팅 입력 시 글자수가 없으면 전송이 불가능하도록 변경
-            // TODO :: 전송이 불가능하도록 색상을 변경한다.
+            // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
             
         }
     }
@@ -178,22 +194,6 @@ $("#text-send").click(
 
     }
 )
-
-// 채팅 데이터를 전송한다.
-function sendText(){
-    if(getInputChat().length > 0){
-        // 채팅 데이터가 있으면 전송한다.
-        // 채팅 데이터를 DB에 저장
-        upLoadChat(getInputChat());
-
-        // 채팅 내용을 공백으로 변경 초기화
-        $("#input-chat").val("");
-
-        // 전송이 불가능하도록 변경
-        // TODO :: 전송이 불가능하도록 색상을 변경한다.
-        
-    }
-}
 
 // 채팅 내용을 DB에 업로드 한다.
 function upLoadChat(contents){
