@@ -131,13 +131,13 @@ $("#input-chat").keyup(function(event){
     if(event.keyCode == 8){
         // Backspace 입력 시 글자수가 없으면 전송이 불가능하도록 변경
         if(getInputChat().length <= 1){
-            // TODO :: 전송이 불가능하도록 색상을 변경한다.
+            // TODO :: 전송이 불가능하도록 전송 버튼을 비활성화 한다.
             
         }
     }else{
         // Backspace 입력 시 글자수가 있으면 전송이 가능하도록 변경
         if(getInputChat().length > 0){
-            // TODO :: 전송이 가능하도록 색상을 변경한다.
+            // TODO :: 전송이 가능하도록 전송 버튼을 활성화 한다.
             
         }
     }
